@@ -180,7 +180,14 @@ export default function App() {
     setIsAiLoading(true);
     const panels = selectedKey.split('-')[0];
     const battery = selectedKey.includes('2t') ? '2' : '1';
-    const advice = await getAdvisorAdvice(panels, battery, selectedData.fixedPrice, selectedData.escalatorPrice);
+    const advice = await getAdvisorAdvice(
+      panels,
+      battery,
+      selectedData.fixedPrice,
+      selectedData.escalatorPrice,
+      selectedData.size,
+      selectedData.epc
+    );
     setAiAdvice(advice || null);
     setIsAiLoading(false);
   };
@@ -316,7 +323,7 @@ export default function App() {
                 
                 <h2 className="font-black text-lg mb-4 flex items-center gap-2">
                   <Sparkles className="w-4 h-4 text-windmar-yellow" />
-                  Apoyo con IA ✨
+                  Análisis Windmar Home ✨
                 </h2>
                 
                 <div className="flex items-center gap-3 mb-6">
