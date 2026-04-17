@@ -11,7 +11,8 @@ import {
   Info,
   Sparkles,
   ArrowRight,
-  FileText
+  FileText,
+  FileDown
 } from 'lucide-react';
 import { 
   XAxis, 
@@ -25,6 +26,9 @@ import {
 } from 'recharts';
 import { motion, AnimatePresence } from 'motion/react';
 import Markdown from 'react-markdown';
+import { PDFModal } from './components/PDFModal';
+import { generateLeasePDF } from './utils/generateLeasePDF';
+import type { ClienteData, ConsultorData } from './components/PDFModal';
 import { SOLAR_DATA, SolarConfig } from './constants';
 import { getAdvisorAdvice } from './services/geminiService';
 
@@ -150,6 +154,7 @@ export default function App() {
   const [aiAdvice, setAiAdvice] = useState<string | null>(null);
   const [isAiLoading, setIsAiLoading] = useState(false);
   const [showSplash, setShowSplash] = useState(true);
+  const [pdfModalAbierto, setPdfModalAbierto] = useState(false);
 
   const selectedData = useMemo(() => SOLAR_DATA[selectedKey] || null, [selectedKey]);
 
@@ -211,6 +216,29 @@ export default function App() {
     }
     return data;
   }, [selectedData]);
+
+  const numPaneles = selectedKey ? parseInt(selectedKey.split('-')[0]) : 0;
+  const incluyeDosT = selectedKey?.includes('2t') ?? false;
+
+  const leaseResumen = {
+    paneles: `${numPaneles} x QCells Q PEAK DUO BLK ML-G10+ 410`,
+    baterias: incluyeDosT ? '2 x Tesla Powerwall 3' : '1 x Tesla Powerwall 3',
+    sistemaKW: selectedData ? Number((selectedData.size / 1000).toFixed(2)) : 0,
+    pagoFijo: selectedData?.fixedPrice ?? 0,
+    pagoEscalador: selectedData?.escalatorPrice ?? 0,
+  };
+
+  const resumenParaModal: Record<string, string> = {
+    'Paneles': leaseResumen.paneles,
+    'Baterias': leaseResumen.baterias,
+    'Tamano del Sistema': `${leaseResumen.sistemaKW} KW`,
+    'Pago Mensual Fijo': `$${leaseResumen.pagoFijo}`,
+    'Pago Mensual Escalador': `$${leaseResumen.pagoEscalador}`,
+  };
+
+  const handleGenerateLeasePDF = async (cliente: ClienteData, consultor: ConsultorData) => {
+    await generateLeasePDF(cliente, consultor, leaseResumen);
+  };
 
   return (
     <AnimatePresence mode="wait">
@@ -422,6 +450,17 @@ export default function App() {
                     ))}
                   </div>
 
+                  {/* PDF Button */}
+                  <div className="flex justify-end">
+                    <button
+                      onClick={() => setPdfModalAbierto(true)}
+                      className="flex items-center gap-2 px-5 py-2.5 bg-[#1a56c4] hover:bg-[#1445a8] text-white rounded-lg font-semibold text-sm transition-colors shadow-md"
+                    >
+                      <FileDown size={18} />
+                      Descargar Cotización PDF
+                    </button>
+                  </div>
+
                   {/* Chart Section */}
                   <section className="bg-white p-6 rounded-[32px] border border-slate-200 shadow-2xl hover:shadow-premium transition-all duration-500">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
@@ -542,6 +581,14 @@ export default function App() {
           </div>
         </div>
       </footer>
+
+        <PDFModal
+          isOpen={pdfModalAbierto}
+          onClose={() => setPdfModalAbierto(false)}
+          tipo="lease"
+          resumen={resumenParaModal}
+          onGenerate={handleGenerateLeasePDF}
+        />
         </motion.div>
       )}
     </AnimatePresence>
