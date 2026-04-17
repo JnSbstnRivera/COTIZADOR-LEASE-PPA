@@ -37,7 +37,7 @@ export async function generateLeasePDF(
   const boldFont  = await outputDoc.embedFont(StandardFonts.HelveticaBold)
   const regFont   = await outputDoc.embedFont(StandardFonts.Helvetica)
 
-  const INSERT_AT = 2  // insertar como 3ª página (índice 2)
+  const INSERT_AT = 1  // insertar como 2ª página (índice 1)
   const totalOrig = originalDoc.getPages().length
 
   // Copiar páginas ANTES del punto de inserción
