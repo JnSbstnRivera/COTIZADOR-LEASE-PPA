@@ -91,17 +91,17 @@ function drawCotizacionLease(
   rect(page, 0, 0, width, height, WHITE)
 
   // ── Header navy (más alto para el logo) ──
-  const headerH = 82
+  const headerH = 96
   rect(page, 0, height - headerH, width, headerH, NAVY)
   rect(page, 0, height - headerH - 8, width * 0.58, 8, ORANGE)
 
   // Texto WINDMAR/ENERGY (izquierda)
-  text(page, 'WINDMAR', 24, M, height - 40, bold, WHITE)
-  text(page, 'ENERGY by Qcells', 10, M, height - 57, reg, ORANGE)
+  text(page, 'WINDMAR', 24, M, height - 44, bold, WHITE)
+  text(page, 'ENERGY by Qcells', 10, M, height - 63, reg, ORANGE)
 
   // Logo Windmar (derecha, grande, centrado verticalmente en el header)
   if (logoImage) {
-    const lDims = logoImage.scale(0.145)
+    const lDims = logoImage.scale(0.20)
     const lx    = width - lDims.width - 20
     const ly    = height - headerH + Math.round((headerH - lDims.height) / 2)
     page.drawImage(logoImage, { x: lx, y: ly, width: lDims.width, height: lDims.height })
