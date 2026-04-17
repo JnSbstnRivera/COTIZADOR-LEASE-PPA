@@ -101,7 +101,7 @@ function drawCotizacionLease(
 
   // Logo Windmar (derecha, grande, centrado verticalmente en el header)
   if (logoImage) {
-    const lDims = logoImage.scale(0.28)
+    const lDims = logoImage.scale(0.34)
     const lx    = width - lDims.width - 20
     const ly    = height - headerH + Math.round((headerH - lDims.height) / 2)
     page.drawImage(logoImage, { x: lx, y: ly, width: lDims.width, height: lDims.height })
@@ -234,7 +234,7 @@ function drawCotizacionLease(
   rect(page, 0, 0, 4, footerH, ORANGE)
 
   if (logoImage) {
-    const fD = logoImage.scale(0.22)
+    const fD = logoImage.scale(0.28)
     const fY  = Math.round((footerH - fD.height) / 2)
     page.drawImage(logoImage, { x: 14, y: fY, width: fD.width, height: fD.height })
   }
