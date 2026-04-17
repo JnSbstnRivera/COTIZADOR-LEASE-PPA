@@ -46,11 +46,21 @@ export async function generateLeasePDF(
     before.forEach(p => outputDoc.addPage(p))
   }
 
-  // 3. Crear la nueva página de cotización
+  // 3. Cargar logo Windmar para la página de cotización
+  let logoImage: any = null
+  try {
+    const logoRes = await fetch('https://i.postimg.cc/44pJ0vXw/logo.png')
+    if (logoRes.ok) {
+      const logoBytes = await logoRes.arrayBuffer()
+      logoImage = await outputDoc.embedPng(logoBytes)
+    }
+  } catch { /* logo opcional, no bloquea */ }
+
+  // 4. Crear la nueva página de cotización
   const { width, height } = originalDoc.getPages()[0].getSize()
   const newPage = outputDoc.addPage([width, height])
   drawCotizacionLease(newPage, { width, height }, boldFont, regFont,
-    cliente, consultor, resumen)
+    cliente, consultor, resumen, logoImage)
 
   // Copiar páginas DESPUÉS del punto de inserción
   if (INSERT_AT < totalOrig) {
@@ -72,122 +82,175 @@ function drawCotizacionLease(
   cliente: ClienteData,
   consultor: ConsultorData,
   resumen: LeaseResumen,
+  logoImage: any = null,
 ) {
-  // Fondo blanco
+  const M = 36   // margen lateral
+  const dataW = width - M * 2
+
+  // ── Fondo blanco ──
   rect(page, 0, 0, width, height, WHITE)
 
-  // ── Barra superior navy ──
-  rect(page, 0, height - 72, width, 72, NAVY)
+  // ── Header navy (más alto para el logo) ──
+  const headerH = 82
+  rect(page, 0, height - headerH, width, headerH, NAVY)
+  rect(page, 0, height - headerH - 8, width * 0.58, 8, ORANGE)
 
-  // Acento naranja bajo la barra
-  rect(page, 0, height - 82, width * 0.55, 10, ORANGE)
+  // Texto WINDMAR/ENERGY (izquierda)
+  text(page, 'WINDMAR', 24, M, height - 40, bold, WHITE)
+  text(page, 'ENERGY by Qcells', 10, M, height - 57, reg, ORANGE)
 
-  // Texto logo en barra
-  text(page, 'WINDMAR', 22, 38, height - 32, bold, WHITE)
-  text(page, 'ENERGY', 11, 38, height - 48, reg, ORANGE)
+  // Logo Windmar (derecha, grande, centrado verticalmente en el header)
+  if (logoImage) {
+    const lDims = logoImage.scale(0.145)
+    const lx    = width - lDims.width - 20
+    const ly    = height - headerH + Math.round((headerH - lDims.height) / 2)
+    // Pill blanco detrás del logo para visibilidad sobre fondo navy
+    rect(page, lx - 8, ly - 5, lDims.width + 16, lDims.height + 10, WHITE)
+    page.drawImage(logoImage, { x: lx, y: ly, width: lDims.width, height: lDims.height })
+  }
 
-  // ── Titulo "Cotizacion" ──
-  text(page, 'Cotizacion', 24, 38, height - 102, bold, BLUE)
+  // ── Título Cotizacion ──
+  text(page, 'Cotizacion', 22, M, height - headerH - 26, bold, BLUE)
 
   const today = new Date().toLocaleDateString('es-PR')
 
-  // ── Datos del cliente (izquierda) ──
-  const clientY = height - 130
-  text(page, clean(cliente.nombre),   11, 38, clientY,      bold, DARK)
-  text(page, clean(cliente.direccion),  9, 38, clientY - 15, reg,  GRAY)
-  text(page, `${clean(cliente.ciudad)}, PR ${cliente.zipCode}`, 9, 38, clientY - 27, reg, GRAY)
-  text(page, cliente.telefono,          9, 38, clientY - 39, reg,  GRAY)
-  text(page, clean(cliente.email),      9, 38, clientY - 51, reg,  BLUE)
+  // ── Bloque cliente/consultor ──
+  // Dividir en dos columnas iguales
+  const colW  = Math.round(width * 0.46)
+  const col2X = M + colW + 10
+  const col2W = width - col2X - M
 
-  // ── Tabla info consultor (derecha) ──
-  const col2X = width * 0.5
-  const col2W = width - col2X - 30
-  const rows = [
+  // Info cliente (izquierda)
+  const cY = height - headerH - 60
+  text(page, clean(cliente.nombre),   11, M, cY,       bold, DARK)
+  text(page, clean(cliente.direccion),  9, M, cY - 16, reg,  GRAY)
+  text(page, `${clean(cliente.ciudad)}, PR ${cliente.zipCode}`, 9, M, cY - 29, reg, GRAY)
+  text(page, cliente.telefono,          9, M, cY - 42, reg,  GRAY)
+  text(page, clean(cliente.email),      9, M, cY - 55, reg,  BLUE)
+
+  // Tabla consultor (derecha) — filas con alineación correcta
+  const rowH = 20
+  const tRows: [string, string][] = [
     ['Cotizacion No.', `001   Fecha: ${today}`],
     ['Consultor:', clean(consultor.nombre)],
     ['Telefono:', consultor.telefono],
     ['Correo:', clean(consultor.email)],
   ]
-  let ry = height - 118
-  rows.forEach(([lbl, val], i) => {
-    if (i % 2 === 0) rect(page, col2X, ry - 14, col2W, 20, LIGHT)
-    text(page, lbl, 8, col2X + 6, ry,  bold, BLUE)
-    text(page, val, 8, col2X + 85, ry, reg,  DARK)
-    ry -= 22
+  const tTop = cY + 6   // alineado con nombre del cliente
+  tRows.forEach(([lbl, val], i) => {
+    const ry = tTop - i * rowH
+    if (i % 2 === 0) rect(page, col2X, ry - rowH + 5, col2W, rowH, LIGHT)
+    text(page, lbl, 8, col2X + 5, ry - 8, bold, BLUE)
+    text(page, val, 8, col2X + 84, ry - 8, reg,  DARK)
   })
-  // borde de la tabla
+  // Borde exterior de la tabla
   page.drawRectangle({
-    x: col2X, y: ry - 2, width: col2W, height: 22 * rows.length + 4,
-    borderColor: BORDER, borderWidth: 0.5,
+    x: col2X,
+    y: tTop - tRows.length * rowH - 2,
+    width:  col2W,
+    height: tRows.length * rowH + rowH,
+    borderColor: BORDER,
+    borderWidth: 0.6,
   })
 
-  // ── Titulo seccion sistema ──
-  const secY = height - 210
-  text(page, 'Detalles del Sistema Solar', 13, 38, secY, bold, BLUE)
-  page.drawLine({ start: { x: 38, y: secY - 5 }, end: { x: 200, y: secY - 5 }, thickness: 2, color: ORANGE })
+  // ── Sección: Detalles del Sistema Solar ──
+  const secY = height - headerH - 168
+  text(page, 'Detalles del Sistema Solar', 13, M, secY, bold, BLUE)
+  page.drawLine({
+    start: { x: M, y: secY - 5 },
+    end:   { x: M + 178, y: secY - 5 },
+    thickness: 2, color: ORANGE,
+  })
 
-  // ── Tabla sistema ──
+  // Filas del sistema (fondo centrado con texto)
   const sysRows: [string, string][] = [
     ['Cantidad de Paneles:', clean(resumen.paneles)],
     ['Cantidad de Baterias:', clean(resumen.baterias)],
     ['Tamano del Sistema:', `${resumen.sistemaKW} KW`],
   ]
+  const rH = 20   // altura de fila
+  const valX = 212
   let sy = secY - 30
   sysRows.forEach(([lbl, val], i) => {
-    if (i % 2 === 0) rect(page, 38, sy - 12, width - 76, 20, LIGHT)
-    text(page, lbl, 9, 46, sy, bold, BLUE)
-    text(page, val, 9, 220, sy, reg, DARK)
-    sy -= 22
+    if (i % 2 === 0) rect(page, M, sy - 6, dataW, rH, LIGHT)
+    text(page, lbl, 9, M + 8, sy + 3, bold, BLUE)
+    text(page, val, 9, valX,  sy + 3, reg,  DARK)
+    sy -= rH + 4
   })
 
-  // separador
-  page.drawLine({ start: { x: 38, y: sy - 5 }, end: { x: width - 38, y: sy - 5 }, thickness: 0.5, color: BORDER })
+  // Separador
+  page.drawLine({
+    start: { x: M, y: sy + 2 },
+    end:   { x: width - M, y: sy + 2 },
+    thickness: 0.5, color: BORDER,
+  })
+  sy -= 16
 
-  // Pagos
-  sy -= 20
-  rect(page, 38, sy - 12, width - 76, 20, LIGHT)
-  text(page, 'Pago Mensual Fijo:', 10, 46, sy, bold, DARK)
-  text(page, `$${resumen.pagoFijo}`, 10, 220, sy, bold, DARK)
-  sy -= 22
-  rect(page, 38, sy - 12, width - 76, 20, LIGHT)
-  text(page, 'Pago Mensual Escalador:', 10, 46, sy, bold, DARK)
-  text(page, `$${resumen.pagoEscalador}`, 10, 220, sy, bold, DARK)
-  sy -= 20
-  text(page, '*Pago mensual es un estimado. Puede variar por +/- 2%', 8, 46, sy, reg, GRAY)
+  // Filas de pagos
+  rect(page, M, sy - 6, dataW, rH, LIGHT)
+  text(page, 'Pago Mensual Fijo:', 10, M + 8, sy + 3, bold, DARK)
+  text(page, `$${resumen.pagoFijo}`, 10, valX, sy + 3, bold, DARK)
+  sy -= rH + 4
+
+  rect(page, M, sy - 6, dataW, rH, LIGHT)
+  text(page, 'Pago Mensual Escalador:', 10, M + 8, sy + 3, bold, DARK)
+  text(page, `$${resumen.pagoEscalador}`, 10, valX, sy + 3, bold, DARK)
+  sy -= 18
+
+  text(page, '* Precios aproximados. Los pagos mensuales pueden variar +/- 2%.', 7.5, M + 8, sy, reg, GRAY)
 
   // ── CTA ──
-  const ctaY = sy - 35
-  text(page, 'Cotiza hoy y empieza a ahorrar con energia confiable.', 14, 38, ctaY, reg, BLUE)
-  text(page, 'Accesible, simple y rapido.', 16, 38, ctaY - 22, bold, NAVY)
+  const ctaY = sy - 32
+  text(page, 'Cotiza hoy y empieza a ahorrar con energia confiable.', 13, M, ctaY, reg, BLUE)
+  text(page, 'Accesible, simple y rapido.', 15, M, ctaY - 19, bold, NAVY)
 
-  // Botón portal
-  rect(page, 38, ctaY - 52, 170, 22, NAVY)
-  text(page, 'Portal de Financiamiento EnFin', 8, 46, ctaY - 44, bold, WHITE)
+  // Financieras — dos badges navy
+  const bY = ctaY - 48
+  rect(page, M,       bY - 5, 66,  22, NAVY)
+  text(page, 'ENFIN', 8, M + 12, bY + 5, bold, WHITE)
 
-  // Beneficios
-  const benY = ctaY - 90
-  const benW = (width - 76) / 3
-  const bens = ['Aprobacion rapida y flexible', 'Garantia, instalacion y servicio incluidos', 'Servicio al cliente 24/7']
+  rect(page, M + 76,  bY - 5, 168, 22, NAVY)
+  text(page, 'PALMETTO LIGHTREACH', 8, M + 86, bY + 5, reg, WHITE)
+
+  // ── Beneficios ──
+  const benY = ctaY - 80
+  const benW = dataW / 3
+  const bens = [
+    'Aprobacion rapida y flexible',
+    'Garantia, instalacion y servicio incluidos',
+    'Servicio al cliente 24/7',
+  ]
   bens.forEach((b, i) => {
-    text(page, b, 8, 46 + i * benW, benY, i === 2 ? bold : reg, i === 2 ? NAVY : GRAY)
+    text(page, b, 8, M + 4 + i * benW, benY, i === 2 ? bold : reg, i === 2 ? NAVY : GRAY)
     if (i < 2) page.drawLine({
-      start: { x: 38 + (i + 1) * benW, y: benY + 15 },
-      end:   { x: 38 + (i + 1) * benW, y: benY - 10 },
+      start: { x: M + (i + 1) * benW, y: benY + 12 },
+      end:   { x: M + (i + 1) * benW, y: benY - 8 },
       thickness: 0.5, color: GRAY,
     })
   })
 
   // ── Footer ──
-  rect(page, 0, 0, width, 55, NAVY)
-  text(page, 'windmar.com', 12, 38, 30, bold, WHITE)
-  page.drawLine({ start: { x: 148, y: 50 }, end: { x: 148, y: 10 }, thickness: 0.5, color: rgb(0.5, 0.5, 0.7) })
-  text(page, 'Contactanos', 7, 162, 40, bold, WHITE)
-  text(page, 'ventas@windmarhome.com', 7, 162, 28, reg, rgb(0.8, 0.8, 0.9))
-  text(page, '(787) 395-7766', 7, 162, 16, reg, rgb(0.8, 0.8, 0.9))
-  page.drawLine({ start: { x: 290, y: 50 }, end: { x: 290, y: 10 }, thickness: 0.5, color: rgb(0.5, 0.5, 0.7) })
-  text(page, 'Direccion', 7, 304, 40, bold, WHITE)
-  text(page, '1255 Avenida F.D. Roosevelt,', 7, 304, 28, reg, rgb(0.8, 0.8, 0.9))
-  text(page, 'San Juan, 00920, Puerto Rico.', 7, 304, 16, reg, rgb(0.8, 0.8, 0.9))
+  rect(page, 0, 0, width, 65, NAVY)
+  rect(page, 0, 63, width, 3, ORANGE)   // línea naranja superior
+  rect(page, 0, 0,  4, 65, ORANGE)      // acento lateral izquierdo
+
+  // Logo en footer
+  if (logoImage) {
+    const fD = logoImage.scale(0.065)
+    const fY  = Math.round((65 - fD.height) / 2)
+    rect(page, 14, fY - 4, fD.width + 10, fD.height + 8, WHITE)
+    page.drawImage(logoImage, { x: 19, y: fY, width: fD.width, height: fD.height })
+  }
+
+  page.drawLine({ start: { x: 158, y: 57 }, end: { x: 158, y: 8 }, thickness: 0.5, color: rgb(0.5, 0.5, 0.7) })
+  text(page, 'Contactanos', 7, 168, 47, bold, WHITE)
+  text(page, 'ventas@windmarhome.com', 7, 168, 35, reg, rgb(0.8, 0.8, 0.9))
+  text(page, '(787) 395-7766', 7, 168, 23, reg, rgb(0.8, 0.8, 0.9))
+
+  page.drawLine({ start: { x: 310, y: 57 }, end: { x: 310, y: 8 }, thickness: 0.5, color: rgb(0.5, 0.5, 0.7) })
+  text(page, 'Direccion', 7, 322, 47, bold, WHITE)
+  text(page, '1255 Avenida F.D. Roosevelt,', 7, 322, 35, reg, rgb(0.8, 0.8, 0.9))
+  text(page, 'San Juan, 00920, Puerto Rico.', 7, 322, 23, reg, rgb(0.8, 0.8, 0.9))
 }
 
 // ── helpers ───────────────────────────────────────────────────
