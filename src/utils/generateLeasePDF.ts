@@ -228,27 +228,27 @@ function drawCotizacionLease(
   })
 
   // ── Footer ──
-  rect(page, 0, 0, width, 65, NAVY)
-  rect(page, 0, 63, width, 3, ORANGE)   // línea naranja superior
-  rect(page, 0, 0,  4, 65, ORANGE)      // acento lateral izquierdo
+  const footerH = 104
+  rect(page, 0, 0, width, footerH, NAVY)
+  rect(page, 0, footerH - 3, width, 3, ORANGE)
+  rect(page, 0, 0, 4, footerH, ORANGE)
 
-  // Logo en footer
+  // Logo en footer (misma escala que header)
   if (logoImage) {
-    const fD = logoImage.scale(0.065)
-    const fY  = Math.round((65 - fD.height) / 2)
-    rect(page, 14, fY - 4, fD.width + 10, fD.height + 8, WHITE)
-    page.drawImage(logoImage, { x: 19, y: fY, width: fD.width, height: fD.height })
+    const fD = logoImage.scale(0.28)
+    const fY  = Math.round((footerH - fD.height) / 2)
+    page.drawImage(logoImage, { x: 14, y: fY, width: fD.width, height: fD.height })
   }
 
-  page.drawLine({ start: { x: 158, y: 57 }, end: { x: 158, y: 8 }, thickness: 0.5, color: rgb(0.5, 0.5, 0.7) })
-  text(page, 'Contactanos', 7, 168, 47, bold, WHITE)
-  text(page, 'ventas@windmarhome.com', 7, 168, 35, reg, rgb(0.8, 0.8, 0.9))
-  text(page, '(787) 395-7766', 7, 168, 23, reg, rgb(0.8, 0.8, 0.9))
+  page.drawLine({ start: { x: 230, y: 92 }, end: { x: 230, y: 12 }, thickness: 0.5, color: rgb(0.5, 0.5, 0.7) })
+  text(page, 'Contactanos', 7, 242, 78, bold, WHITE)
+  text(page, 'ventas@windmarhome.com', 7, 242, 60, reg, rgb(0.8, 0.8, 0.9))
+  text(page, '(787) 395-7766', 7, 242, 44, reg, rgb(0.8, 0.8, 0.9))
 
-  page.drawLine({ start: { x: 310, y: 57 }, end: { x: 310, y: 8 }, thickness: 0.5, color: rgb(0.5, 0.5, 0.7) })
-  text(page, 'Direccion', 7, 322, 47, bold, WHITE)
-  text(page, '1255 Avenida F.D. Roosevelt,', 7, 322, 35, reg, rgb(0.8, 0.8, 0.9))
-  text(page, 'San Juan, 00920, Puerto Rico.', 7, 322, 23, reg, rgb(0.8, 0.8, 0.9))
+  page.drawLine({ start: { x: 390, y: 92 }, end: { x: 390, y: 12 }, thickness: 0.5, color: rgb(0.5, 0.5, 0.7) })
+  text(page, 'Direccion', 7, 402, 78, bold, WHITE)
+  text(page, '1255 Avenida F.D. Roosevelt,', 7, 402, 60, reg, rgb(0.8, 0.8, 0.9))
+  text(page, 'San Juan, 00920, Puerto Rico.', 7, 402, 44, reg, rgb(0.8, 0.8, 0.9))
 }
 
 // ── helpers ───────────────────────────────────────────────────
