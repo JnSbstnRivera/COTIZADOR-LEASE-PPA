@@ -262,10 +262,10 @@ function clean(s: string): string {
   return s
     .replace(/[áàä]/g, 'a').replace(/[éèë]/g, 'e')
     .replace(/[íìï]/g, 'i').replace(/[óòö]/g, 'o')
-    .replace(/[úùü]/g, 'u').replace(/[ñ]/g, 'n')
+    .replace(/[úùü]/g, 'u')
     .replace(/[ÁÀÄ]/g, 'A').replace(/[ÉÈË]/g, 'E')
     .replace(/[ÍÌÏ]/g, 'I').replace(/[ÓÒÖ]/g, 'O')
-    .replace(/[ÚÙÜ]/g, 'U').replace(/[Ñ]/g, 'N')
+    .replace(/[ÚÙÜ]/g, 'U')
 }
 function range(from: number, to: number) {
   return Array.from({ length: to - from }, (_, i) => i + from)
