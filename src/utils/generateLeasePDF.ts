@@ -37,7 +37,7 @@ export async function generateLeasePDF(
   const boldFont  = await outputDoc.embedFont(StandardFonts.HelveticaBold)
   const regFont   = await outputDoc.embedFont(StandardFonts.Helvetica)
 
-  const INSERT_AT = 3  // insertar como 4ª página (índice 3)
+  const INSERT_AT = 2  // insertar como 3ª página (índice 2)
   const totalOrig = originalDoc.getPages().length
 
   // Copiar páginas ANTES del punto de inserción
@@ -49,7 +49,7 @@ export async function generateLeasePDF(
   // 3. Cargar logo Windmar para la página de cotización
   let logoImage: any = null
   try {
-    const logoRes = await fetch('https://i.postimg.cc/44pJ0vXw/logo.png')
+    const logoRes = await fetch('https://i.postimg.cc/6T5J2v2G/logo.png')
     if (logoRes.ok) {
       const logoBytes = await logoRes.arrayBuffer()
       logoImage = await outputDoc.embedPng(logoBytes)
@@ -104,8 +104,6 @@ function drawCotizacionLease(
     const lDims = logoImage.scale(0.145)
     const lx    = width - lDims.width - 20
     const ly    = height - headerH + Math.round((headerH - lDims.height) / 2)
-    // Pill blanco detrás del logo para visibilidad sobre fondo navy
-    rect(page, lx - 8, ly - 5, lDims.width + 16, lDims.height + 10, WHITE)
     page.drawImage(logoImage, { x: lx, y: ly, width: lDims.width, height: lDims.height })
   }
 
@@ -210,7 +208,7 @@ function drawCotizacionLease(
   text(page, 'ENFIN', 8, M + 12, bY + 5, bold, WHITE)
 
   rect(page, M + 76,  bY - 5, 168, 22, NAVY)
-  text(page, 'PALMETTO LIGHTREACH', 8, M + 86, bY + 5, reg, WHITE)
+  text(page, 'PALMETTO LIGHTREACH', 8, M + 86, bY + 5, bold, WHITE)
 
   // ── Beneficios ──
   const benY = ctaY - 80
