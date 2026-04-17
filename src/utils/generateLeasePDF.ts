@@ -228,27 +228,26 @@ function drawCotizacionLease(
   })
 
   // ── Footer ──
-  const footerH = 104
+  const footerH = 60
   rect(page, 0, 0, width, footerH, NAVY)
   rect(page, 0, footerH - 3, width, 3, ORANGE)
   rect(page, 0, 0, 4, footerH, ORANGE)
 
-  // Logo en footer (misma escala que header)
   if (logoImage) {
-    const fD = logoImage.scale(0.34)
+    const fD = logoImage.scale(0.22)
     const fY  = Math.round((footerH - fD.height) / 2)
     page.drawImage(logoImage, { x: 14, y: fY, width: fD.width, height: fD.height })
   }
 
-  page.drawLine({ start: { x: 230, y: 92 }, end: { x: 230, y: 12 }, thickness: 0.5, color: rgb(0.5, 0.5, 0.7) })
-  text(page, 'Contactanos', 7, 242, 78, bold, WHITE)
-  text(page, 'ventas@windmarhome.com', 7, 242, 60, reg, rgb(0.8, 0.8, 0.9))
-  text(page, '(787) 395-7766', 7, 242, 44, reg, rgb(0.8, 0.8, 0.9))
+  page.drawLine({ start: { x: 230, y: 50 }, end: { x: 230, y: 8 }, thickness: 0.5, color: rgb(0.5, 0.5, 0.7) })
+  text(page, 'Contactanos', 7, 242, 44, bold, WHITE)
+  text(page, 'ventas@windmarhome.com', 7, 242, 30, reg, rgb(0.8, 0.8, 0.9))
+  text(page, '(787) 395-7766', 7, 242, 18, reg, rgb(0.8, 0.8, 0.9))
 
-  page.drawLine({ start: { x: 390, y: 92 }, end: { x: 390, y: 12 }, thickness: 0.5, color: rgb(0.5, 0.5, 0.7) })
-  text(page, 'Direccion', 7, 402, 78, bold, WHITE)
-  text(page, '1255 Avenida F.D. Roosevelt,', 7, 402, 60, reg, rgb(0.8, 0.8, 0.9))
-  text(page, 'San Juan, 00920, Puerto Rico.', 7, 402, 44, reg, rgb(0.8, 0.8, 0.9))
+  page.drawLine({ start: { x: 390, y: 50 }, end: { x: 390, y: 8 }, thickness: 0.5, color: rgb(0.5, 0.5, 0.7) })
+  text(page, 'Direccion', 7, 402, 44, bold, WHITE)
+  text(page, '1255 Avenida F.D. Roosevelt,', 7, 402, 30, reg, rgb(0.8, 0.8, 0.9))
+  text(page, 'San Juan, 00920, Puerto Rico.', 7, 402, 18, reg, rgb(0.8, 0.8, 0.9))
 }
 
 // ── helpers ───────────────────────────────────────────────────
