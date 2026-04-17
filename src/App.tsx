@@ -223,7 +223,7 @@ export default function App() {
   const leaseResumen = {
     paneles: `${numPaneles} x QCells Q PEAK DUO BLK ML-G10+ 410`,
     baterias: incluyeDosT ? '2 x Tesla Powerwall 3' : '1 x Tesla Powerwall 3',
-    sistemaKW: selectedData ? Number((selectedData.size / 1000).toFixed(2)) : 0,
+    sistemaKW: selectedData ? Number((parseFloat(selectedData.size.replace(/,/g, '')) / 1000).toFixed(2)) : 0,
     pagoFijo: selectedData?.fixedPrice ?? 0,
     pagoEscalador: selectedData?.escalatorPrice ?? 0,
   };

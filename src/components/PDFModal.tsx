@@ -40,6 +40,31 @@ const TITULOS = {
   roofing: 'Cotización ROOFING',
 }
 
+// ── helper de campo (fuera del componente para evitar re-mount en cada tecla) ──
+function Field({
+  label, value, onChange, type = 'text', colSpan = 1,
+}: {
+  label: string; value: string; onChange: (v: string) => void
+  type?: string; colSpan?: number
+}) {
+  return (
+    <div style={{ gridColumn: colSpan === 2 ? 'span 2' : 'span 1' }}>
+      <label style={{ display: 'block', fontSize: 12, color: '#555', marginBottom: 4 }}>
+        {label}
+      </label>
+      <input
+        type={type}
+        value={value}
+        onChange={e => onChange(e.target.value)}
+        style={{
+          width: '100%', border: '1px solid #d0d9ef', borderRadius: 8,
+          padding: '8px 10px', fontSize: 13, outline: 'none', boxSizing: 'border-box',
+        }}
+      />
+    </div>
+  )
+}
+
 // ── componente ────────────────────────────────────────────────
 export function PDFModal({
   isOpen, onClose, tipo, resumen, onGenerate,
@@ -75,29 +100,6 @@ export function PDFModal({
   }
 
   if (!isOpen) return null
-
-  // helper de campo
-  const Field = ({
-    label, value, onChange, type = 'text', colSpan = 1,
-  }: {
-    label: string; value: string; onChange: (v: string) => void
-    type?: string; colSpan?: number
-  }) => (
-    <div style={{ gridColumn: colSpan === 2 ? 'span 2' : 'span 1' }}>
-      <label style={{ display: 'block', fontSize: 12, color: '#555', marginBottom: 4 }}>
-        {label}
-      </label>
-      <input
-        type={type}
-        value={value}
-        onChange={e => onChange(e.target.value)}
-        style={{
-          width: '100%', border: '1px solid #d0d9ef', borderRadius: 8,
-          padding: '8px 10px', fontSize: 13, outline: 'none', boxSizing: 'border-box',
-        }}
-      />
-    </div>
-  )
 
   return (
     <div style={{
