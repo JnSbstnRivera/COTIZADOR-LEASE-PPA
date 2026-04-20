@@ -87,7 +87,7 @@ const SplashScreen = ({ onComplete }: { onComplete: () => void }) => {
           <img
             src="https://i.postimg.cc/44pJ0vXw/logo.png"
             alt="Windmar Logo"
-            className="h-20 w-auto drop-shadow-md"
+            className="h-40 md:h-48 w-auto drop-shadow-md"
             referrerPolicy="no-referrer"
           />
         </motion.div>

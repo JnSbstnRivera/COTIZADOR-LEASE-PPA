@@ -10,7 +10,7 @@
       (function() {
         try {
           var saved = localStorage.getItem('wh-theme');
-          if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          if (saved === 'dark') {
             document.documentElement.classList.add('dark');
           }
         } catch(e) {}
