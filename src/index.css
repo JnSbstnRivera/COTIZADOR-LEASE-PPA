@@ -1,13 +1,16 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  
+  --font-sans: "Poppins", "Inter", ui-sans-serif, system-ui, sans-serif;
+
   --color-windmar-blue: #004a99;
   --color-windmar-dark: #002d5f;
   --color-windmar-yellow: #f1c40f;
   --color-windmar-orange: #f39c12;
+  --color-wh-orange: #F89B24;
 
   --animate-spin-slow: spin 8s linear infinite;
 }
@@ -19,7 +22,10 @@
 
 @layer base {
   body {
-    @apply bg-[#f0f7ff] text-slate-900 antialiased;
+    @apply bg-[#f0f7ff] dark:bg-[#0f1215] text-slate-900 dark:text-[#e8eaed] antialiased transition-colors duration-300;
+  }
+  *, *::before, *::after {
+    @apply transition-colors duration-300;
   }
 }
 
