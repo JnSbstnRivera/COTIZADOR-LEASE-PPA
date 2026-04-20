@@ -550,21 +550,40 @@ export default function App() {
           </main>
 
           {/* Footer */}
-          <footer className="max-w-7xl mx-auto px-4 mt-20">
-            <div className="bg-white dark:bg-[#161b22] rounded-[40px] p-12 border border-slate-200 dark:border-white/[0.08] text-center relative overflow-hidden">
-              <div className="absolute bottom-0 left-0 w-full h-2 bg-gradient-to-r from-windmar-blue via-windmar-yellow to-windmar-orange"></div>
-
-              <div className="flex flex-col items-center gap-4">
-                <div className="w-16 h-16 bg-slate-50 dark:bg-[#0f1215] rounded-full flex items-center justify-center mb-2 shadow-sm">
-                  <ShieldCheck className="w-8 h-8 text-windmar-blue" />
+          <footer className="max-w-7xl mx-auto px-4 mt-20 pb-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-8 border-t border-slate-200 dark:border-white/[0.08]">
+              <div className="flex gap-4">
+                <div className="bg-windmar-blue/10 p-3 rounded-xl h-fit">
+                  <ShieldCheck className="text-windmar-blue" size={24} />
                 </div>
-                <h2 className="text-lg font-black text-windmar-dark dark:text-[#e8eaed]">Grupo de Análisis y Desarrollo</h2>
-                <p className="text-slate-500 dark:text-[#a0a4ad] font-medium">Call Center · Windmar Home</p>
-
-                <p className="text-lg font-medium text-slate-600 dark:text-[#a0a4ad] mt-8 italic">
-                  "¡Hagamos que tu techo pague tu factura!" 🏠🔋
-                </p>
+                <div>
+                  <h4 className="font-bold text-slate-900 dark:text-[#e8eaed] text-sm mb-1">Garantía 25 Años</h4>
+                  <p className="text-slate-600 dark:text-[#a0a4ad] text-xs leading-relaxed">Cobertura integral de paneles, inversores y componentes críticos del sistema.</p>
+                </div>
               </div>
+              <div className="flex gap-4">
+                <div className="bg-windmar-yellow/10 p-3 rounded-xl h-fit">
+                  <Sun className="text-windmar-orange" size={24} />
+                </div>
+                <div>
+                  <h4 className="font-bold text-slate-900 dark:text-[#e8eaed] text-sm mb-1">Sin Inversión Inicial</h4>
+                  <p className="text-slate-600 dark:text-[#a0a4ad] text-xs leading-relaxed">Energía solar desde el primer día sin costo de entrada bajo el modelo Lease PPA.</p>
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <div className="bg-emerald-600/10 p-3 rounded-xl h-fit">
+                  <Battery className="text-emerald-600" size={24} />
+                </div>
+                <div>
+                  <h4 className="font-bold text-slate-900 dark:text-[#e8eaed] text-sm mb-1">Monitoreo 24/7</h4>
+                  <p className="text-slate-600 dark:text-[#a0a4ad] text-xs leading-relaxed">Supervisión inteligente continua para garantizar el máximo rendimiento del sistema.</p>
+                </div>
+              </div>
+            </div>
+            <div className="text-center pt-8 pb-4">
+              <p className="text-[10px] font-black text-slate-400 dark:text-[#6b7280] uppercase tracking-[0.3em]">
+                © 2026 Equipo de Análisis y Desarrollo — Call Center Windmar Home
+              </p>
             </div>
           </footer>
 
