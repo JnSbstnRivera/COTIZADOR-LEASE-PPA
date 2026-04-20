@@ -87,7 +87,7 @@ const SplashScreen = ({ onComplete }: { onComplete: () => void }) => {
           <img
             src="https://i.postimg.cc/44pJ0vXw/logo.png"
             alt="Windmar Logo"
-            className="h-40 md:h-48 w-auto drop-shadow-md"
+            className="h-52 md:h-56 w-auto max-w-xs drop-shadow-md"
             referrerPolicy="no-referrer"
           />
         </motion.div>
@@ -247,7 +247,7 @@ export default function App() {
                 <img
                   src="https://i.postimg.cc/44pJ0vXw/logo.png"
                   alt="Windmar Logo"
-                  className="h-12 md:h-14 w-auto object-contain transition-transform hover:scale-105 duration-500 dark:brightness-0 dark:invert"
+                  className="h-12 md:h-14 w-auto object-contain transition-transform hover:scale-105 duration-500"
                   referrerPolicy="no-referrer"
                 />
                 <div className="h-10 w-px bg-slate-200 dark:bg-white/10 hidden md:block"></div>
