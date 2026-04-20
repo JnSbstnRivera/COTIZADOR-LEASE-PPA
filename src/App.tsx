@@ -87,7 +87,7 @@ const SplashScreen = ({ onComplete }: { onComplete: () => void }) => {
           <img
             src="https://i.postimg.cc/44pJ0vXw/logo.png"
             alt="Windmar Logo"
-            className="h-20 w-auto drop-shadow-md brightness-0 invert"
+            className="h-20 w-auto drop-shadow-md"
             referrerPolicy="no-referrer"
           />
         </motion.div>
@@ -100,7 +100,7 @@ const SplashScreen = ({ onComplete }: { onComplete: () => void }) => {
             transition={{ delay: 1, duration: 1 }}
             className="text-3xl md:text-5xl font-black text-white uppercase tracking-widest mb-2"
           >
-            COTIZADOR LEASE PPA
+            COTIZADOR WINDMAR LEASE PPA
           </motion.h1>
           <motion.div
             initial={{ width: 0 }}
@@ -152,8 +152,7 @@ export default function App() {
   const [isDarkMode, setIsDarkMode] = useState(() => {
     try {
       const saved = localStorage.getItem('wh-theme');
-      if (saved) return saved === 'dark';
-      return window.matchMedia('(prefers-color-scheme: dark)').matches;
+      return saved === 'dark';
     } catch (e) { return false; }
   });
 
@@ -253,7 +252,7 @@ export default function App() {
                 />
                 <div className="h-10 w-px bg-slate-200 dark:bg-white/10 hidden md:block"></div>
                 <div>
-                  <h1 className="text-xl md:text-3xl font-black text-windmar-dark dark:text-[#e8eaed] tracking-tight leading-none">WINDMAR LEASE PRO ⚡</h1>
+                  <h1 className="text-xl md:text-3xl font-black text-windmar-dark dark:text-[#e8eaed] tracking-tight leading-none">COTIZADOR WINDMAR LEASE PPA ⚡</h1>
                   <p className="text-[10px] md:text-xs font-bold text-slate-400 dark:text-[#6b7280] uppercase tracking-[0.2em] mt-0.5">Windmar Home · Asesoría Energética 🏠</p>
                 </div>
               </div>
