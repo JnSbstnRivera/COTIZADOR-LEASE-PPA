@@ -87,7 +87,7 @@ const SplashScreen = ({ onComplete }: { onComplete: () => void }) => {
           <img
             src="https://i.postimg.cc/44pJ0vXw/logo.png"
             alt="Windmar Logo"
-            className="h-52 md:h-56 w-auto max-w-xs drop-shadow-md"
+            className="h-28 sm:h-40 md:h-56 w-auto max-w-xs drop-shadow-md"
             referrerPolicy="no-referrer"
           />
         </motion.div>
@@ -98,7 +98,7 @@ const SplashScreen = ({ onComplete }: { onComplete: () => void }) => {
             initial={{ opacity: 0, letterSpacing: "0.5em" }}
             animate={{ opacity: 1, letterSpacing: "0.15em" }}
             transition={{ delay: 1, duration: 1 }}
-            className="text-3xl md:text-5xl font-black text-white uppercase tracking-widest mb-2"
+            className="text-xl sm:text-3xl md:text-5xl font-black text-white uppercase tracking-widest mb-2"
           >
             COTIZADOR WINDMAR LEASE PPA
           </motion.h1>
@@ -242,7 +242,7 @@ export default function App() {
         >
           {/* Header */}
           <header className="bg-white dark:bg-[#161b22] border-b border-slate-200 dark:border-white/[0.08] sticky top-0 z-50 shadow-lg dark:shadow-black/30">
-            <div className="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between">
+            <div className="max-w-7xl mx-auto px-4 min-h-[4rem] sm:h-20 flex flex-wrap items-center justify-between gap-2 py-2 sm:py-0">
               <div className="flex items-center gap-4 md:gap-6">
                 <img
                   src="https://i.postimg.cc/44pJ0vXw/logo.png"
@@ -281,7 +281,7 @@ export default function App() {
             </div>
           </header>
 
-          <main className="max-w-7xl mx-auto px-4 mt-8">
+          <main className="max-w-7xl mx-auto px-4 mt-4 sm:mt-8">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
               {/* Left Column: Controls & Info */}
@@ -450,7 +450,7 @@ export default function App() {
                       </div>
 
                       {/* Chart Section */}
-                      <section className="bg-white dark:bg-[#161b22] p-6 rounded-[32px] border border-slate-200 dark:border-white/[0.08] shadow-2xl hover:shadow-premium transition-all duration-500">
+                      <section className="bg-white dark:bg-[#161b22] p-4 sm:p-6 rounded-2xl sm:rounded-[32px] border border-slate-200 dark:border-white/[0.08] shadow-2xl hover:shadow-premium transition-all duration-500">
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
                           <div>
                             <h3 className="text-lg font-black text-windmar-dark dark:text-[#e8eaed]">Proyección 25 Años 📊</h3>
@@ -526,7 +526,7 @@ export default function App() {
 
                 {/* Informative Section */}
                 <section className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-                  <div className="bg-white dark:bg-[#161b22] p-8 rounded-[32px] border border-slate-200 dark:border-white/[0.08] shadow-xl hover:shadow-premium transition-all duration-500 h-full flex flex-col">
+                  <div className="bg-white dark:bg-[#161b22] p-4 sm:p-8 rounded-2xl sm:rounded-[32px] border border-slate-200 dark:border-white/[0.08] shadow-xl hover:shadow-premium transition-all duration-500 h-full flex flex-col">
                     <h4 className="text-sm font-black text-windmar-dark dark:text-[#e8eaed] mb-4 flex items-center gap-2">
                       <Info className="w-4 h-4 text-windmar-blue" />
                       Modelo LEASE 📘
@@ -535,7 +535,7 @@ export default function App() {
                       Energía limpia sin inversión inicial. El modelo Lease te permite disfrutar de todos los beneficios de la energía solar pagando únicamente por la energía que consumes, a un costo mucho menor que la red eléctrica tradicional. Colaboramos con <strong>ENFIN</strong> y <strong>Palmetto Lightreach</strong> para ofrecerte las mejores condiciones de financiamiento y arrendamiento en Puerto Rico, adaptadas a tu consumo real y presupuesto. 🇵🇷
                     </p>
                   </div>
-                  <div className="bg-white dark:bg-[#161b22] p-8 rounded-[32px] border border-slate-200 dark:border-white/[0.08] shadow-xl hover:shadow-premium transition-all duration-500 h-full flex flex-col">
+                  <div className="bg-white dark:bg-[#161b22] p-4 sm:p-8 rounded-2xl sm:rounded-[32px] border border-slate-200 dark:border-white/[0.08] shadow-xl hover:shadow-premium transition-all duration-500 h-full flex flex-col">
                     <h4 className="text-sm font-black text-windmar-dark dark:text-[#e8eaed] mb-4 flex items-center gap-2">
                       <ShieldCheck className="w-4 h-4 text-emerald-600" />
                       Garantías 🛡️
@@ -550,7 +550,7 @@ export default function App() {
           </main>
 
           {/* Footer */}
-          <footer className="max-w-7xl mx-auto px-4 mt-20 pb-4">
+          <footer className="max-w-7xl mx-auto px-4 mt-8 sm:mt-20 pb-4">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-8 border-t border-slate-200 dark:border-white/[0.08]">
               <div className="flex gap-4">
                 <div className="bg-windmar-blue/10 p-3 rounded-xl h-fit">
